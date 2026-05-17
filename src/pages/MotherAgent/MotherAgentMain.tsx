@@ -523,7 +523,7 @@ function ParasiteHint({ zh, ccInstalled }: ParasiteHintProps) {
       </span>
       <span
         role="tooltip"
-        className="pointer-events-none absolute left-0 bottom-full z-[100] mb-1.5 w-72 rounded border border-cyber-accent/40 bg-cyber-elevated px-3 py-2 text-[11px] leading-relaxed text-cyber-text shadow-cyber-card backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity"
+        className="pointer-events-none absolute left-0 bottom-full z-[100] mb-2 w-64 rounded border border-cyber-accent/40 bg-cyber-elevated px-3 py-2 text-[11px] leading-relaxed text-cyber-text shadow-cyber-card backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity"
       >
         {/* Caret — rotated square poking down out of the tooltip's bottom edge,
             aligned roughly above the ? glyph at the left side. */}
