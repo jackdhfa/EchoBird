@@ -7,13 +7,14 @@
 //!
 //!   * `tauri::generate_context!()` resolves `tauri.conf.json`.
 //!   * `include_bytes!("../icons/tray-icon.png")` reads the tray icon.
-//!   * The `include_str!` calls that pull every PUBLIC install JSON and
-//!     Quick-Action script into the binary at compile time. These files
-//!     live under `../../docs/api/...` because they also feed
-//!     echobird.ai/api/.... Internal-only assets (the Mother Agent
-//!     prompt and hints) are NOT bundled here — they live inside the
-//!     private `echobird_core` crate and are inaccessible from this
-//!     repository or the public site.
+//!   * The `include_str!` calls that pull every PUBLIC install JSON
+//!     into the binary at compile time. These files live under
+//!     `../../docs/api/tools/install/` because they also feed
+//!     echobird.ai/api/tools/install/.... Internal-only assets (the
+//!     Mother Agent prompt and hints, the Quick-Action task scripts)
+//!     are NOT bundled here — they live inside the private
+//!     `echobird_core` crate and are inaccessible from this repository
+//!     or the public site.
 //!
 //! Once those compile-time expansions happen here we register the
 //! bundled-asset table with `echobird_core` and call `echobird_core::run`,
@@ -108,16 +109,6 @@ static BUNDLED: BundledAssets = BundledAssets {
         (
             "grok",
             include_str!("../../docs/api/tools/install/grok.json"),
-        ),
-    ],
-    tool_scripts: &[
-        (
-            "network-info",
-            include_str!("../../docs/api/tools/network-info.md"),
-        ),
-        (
-            "security-audit",
-            include_str!("../../docs/api/tools/security-audit.md"),
         ),
     ],
 };
