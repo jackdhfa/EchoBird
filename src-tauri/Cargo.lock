@@ -1304,7 +1304,7 @@ dependencies = [
 
 [[package]]
 name = "echobird"
-version = "4.8.6"
+version = "4.8.7"
 dependencies = [
  "echobird_core",
  "tauri",
@@ -1315,7 +1315,7 @@ dependencies = [
 [[package]]
 name = "echobird_core"
 version = "0.1.0"
-source = "git+https://github.com/edison7009/EchoBird-secret-.git?branch=main#b979c03a35a09e802e882c55c5dbb8e6a3d53bd3"
+source = "git+https://github.com/edison7009/EchoBird-secret-.git?branch=main#86f7077287797343daf4c6c44e2ec3f6e72284b1"
 dependencies = [
  "aes-gcm",
  "async-ssh2-tokio",
