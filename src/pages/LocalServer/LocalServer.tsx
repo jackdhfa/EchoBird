@@ -722,7 +722,7 @@ export const LocalServerMain: React.FC = () => {
                           <td className="px-3 py-4 align-top space-y-1">
                             <div>H100 80GB / H200 / A100 / Mac Studio M3 Ultra 192GB+</div>
                             <div className="text-cyber-text-muted/80 text-xs">
-                              Qwen3.6 27B、Qwen3.5 27B Opus Distill、Nemotron 3 Nano Omni 30B-A3B
+                              Qwen3.6 27B、Qwen3.6 27B Opus Distill v2、Nemotron 3 Nano Omni 30B-A3B
                             </div>
                           </td>
                         </tr>
@@ -1032,9 +1032,7 @@ export const LocalServerPanel: React.FC = () => {
         </div>
         {/* VRAM total — sums across all GPUs (e.g. 4× H100 → 320GB) */}
         {gpuVramGb > 0 && (
-          <span className="text-[10px] text-cyber-text-muted font-mono">
-            {gpuVramGb}GB
-          </span>
+          <span className="text-[10px] text-cyber-text-muted font-mono">{gpuVramGb}GB</span>
         )}
       </div>
 
