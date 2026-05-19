@@ -284,27 +284,26 @@ export const ModelCard = React.memo(
             )}
           </div>
 
-          {/* Protocol row — same label:value rhythm as the rows above.
-              Tested protocols at /60 (parity with other values), untested
-              at /30 (dimmer but still visible so the user can see what
-              the model *could* speak). Dropped the [BRACKETS] + tracking-
-              widest + pulse styling — that broke the visual cadence of
-              the card and made the model picker feel busier than the
-              App Manager card grid it lives next to. */}
+          {/* Protocol row — structurally identical to the rows above so
+              the row heights stay in lock-step with space-y-1.5. The
+              value span uses plain inline children (no nested flex —
+              that was making this row visually taller than the others
+              and breaking the rhythm). Tested = /60, untested = /30. */}
           <div className="flex items-center gap-1 truncate">
             <span className="text-cyber-text/60">{t('model.protocol')}:</span>
-            <span className="truncate flex items-center gap-2">
+            <span className="truncate text-cyber-text/60">
               {protocols.includes('openai') && (
                 <span className={openaiTested ? 'text-cyber-text/60' : 'text-cyber-text/30'}>
                   OpenAI
                 </span>
               )}
+              {protocols.includes('openai') && protocols.includes('anthropic') && ' '}
               {protocols.includes('anthropic') && (
                 <span className={anthropicTested ? 'text-cyber-text/60' : 'text-cyber-text/30'}>
                   Anthropic
                 </span>
               )}
-              {protocols.length === 0 && <span className="text-cyber-text/30">-</span>}
+              {protocols.length === 0 && '-'}
             </span>
           </div>
         </div>
