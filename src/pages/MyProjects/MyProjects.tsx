@@ -17,6 +17,7 @@ import {
 import { useToolsStore } from '../../stores/toolsStore';
 import { useAppManager } from '../AppManager/context';
 import { ToolCard } from '../../components';
+import { useConfirm } from '../../components/ConfirmDialog';
 
 // Placeholder examples shown inside the file-picker fields when nothing's
 // been chosen yet. Kept in English path style across all locales — the
@@ -141,6 +142,7 @@ const ProjectToolCard: React.FC<{
   const { t } = useI18n();
   const detectedTools = useToolsStore((s) => s.detectedTools);
   const deleteProject = useMyProjectsStore((s) => s.deleteProject);
+  const confirm = useConfirm();
 
   // Seeded built-ins (linkedToolId set) read their live activeModel + icon
   // off the running tool scan, so swapping the model from the right panel
@@ -171,9 +173,16 @@ const ProjectToolCard: React.FC<{
         // row slot (right-aligned at the bottom of the card).
         <div className="flex items-center justify-end gap-2">
           <button
-            onClick={(e) => {
+            onClick={async (e) => {
               e.stopPropagation();
-              deleteProject(project.id);
+              const ok = await confirm({
+                title: t('myProjects.deleteTitle'),
+                message: t('myProjects.deleteConfirm'),
+                confirmText: t('btn.delete'),
+                cancelText: t('btn.cancel'),
+                type: 'danger',
+              });
+              if (ok) deleteProject(project.id);
             }}
             className="text-xs font-mono text-cyber-text-muted/70 hover:text-red-500 transition-colors"
           >

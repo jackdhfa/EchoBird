@@ -74,6 +74,8 @@ export type TKey =
   | 'myProjects.pickFile'
   | 'myProjects.copyTemplate'
   | 'myProjects.templateCopied'
+  | 'myProjects.deleteTitle'
+  | 'myProjects.deleteConfirm'
   | 'myProjects.bottomHint'
   | 'hint.myProjects'
   | 'settings.closeWindowBehavior'
