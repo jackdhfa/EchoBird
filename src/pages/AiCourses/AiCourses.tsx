@@ -74,7 +74,7 @@ const CN_COURSES: Course[] = [
   },
   {
     id: 'cn-andrew-ng-ml',
-    name: '吴恩达 · 机器学习(中文字幕)',
+    name: '吴恩达 · 机器学习',
     url: 'https://www.bilibili.com/video/BV1Bq421A74G',
     description: '斯坦福 CS229 经典机器学习课程,B站官方中文字幕版',
     category: '机器学习',
@@ -82,7 +82,7 @@ const CN_COURSES: Course[] = [
   },
   {
     id: 'cn-andrew-ng-dl',
-    name: '吴恩达 · 深度学习专项课(中文)',
+    name: '吴恩达 · 深度学习专项课',
     url: 'https://www.bilibili.com/video/BV1FT4y1E74V',
     description:
       '深度学习五部曲:神经网络与深度学习 / 改善深层 NN / 结构化机器学习项目 / CNN / 序列模型',
@@ -123,7 +123,7 @@ const CN_COURSES: Course[] = [
   },
   {
     id: 'cn-cs231n-zh',
-    name: '斯坦福 CS231n · 中文翻译',
+    name: '斯坦福 CS231n',
     url: 'https://www.bilibili.com/video/BV1nJ411z7fe',
     description: '李飞飞团队的计算机视觉名课,B 站中文翻译版',
     category: '计算机视觉',
