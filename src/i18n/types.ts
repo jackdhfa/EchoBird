@@ -243,6 +243,8 @@ export type TKey =
   // Toast shown when user switches model or Claude Code mid-chat
   | 'mother.switchEngineHint'
   | 'mother.switchEngineHintReason'
+  // Context-usage line in the "?" tooltip — {used}/{total}/{pct} placeholders
+  | 'mother.contextUsage'
   // Terminal status bar
   | 'terminal.thinking'
   // SSH Guide

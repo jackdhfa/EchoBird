@@ -283,6 +283,7 @@ const en: Translations = {
     "I'm an AI assistant — short memory, sharp install skills, here to launch you into AI. Install Claude Code and configure a model, then pick it on the right to keep talking here.",
   'mother.switchEngineHint': 'Clear chat history after switching',
   'mother.switchEngineHintReason': 'Avoids context-mismatch errors',
+  'mother.contextUsage': 'Context usage {used}KB / {total}KB ({pct}%)',
   'terminal.thinking': 'thinking',
   'ssh.winNote':
     'Windows SSH deployment is more complex than Linux/macOS. Recommended: install EchoBird on the Windows machine first, then use Install & Repair to set up local SSH access for you.',

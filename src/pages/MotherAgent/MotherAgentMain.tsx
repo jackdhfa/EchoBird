@@ -10,7 +10,7 @@ import { useToast } from '../../components/Toast';
 import * as api from '../../api/tauri';
 import { useNavigationStore } from '../../stores/navigationStore';
 import { useMotherAgent } from './context';
-import { MA_PAGE_SIZE } from './types';
+import { MA_PAGE_SIZE, type ChatMessage } from './types';
 
 // ===== Main Content (center area) — CHAT =====
 export function MotherAgentMain() {
@@ -51,6 +51,11 @@ export function MotherAgentMain() {
       })),
     [models]
   );
+
+  // Estimated UTF-8 byte footprint of the current chat — drives the ring
+  // around the "?" hint so users can see how close they are to the
+  // agent_loop trim threshold (MAX_CONTEXT_BYTES in echobird_core).
+  const contextBytes = React.useMemo(() => estimateContextBytes(chatOutput), [chatOutput]);
 
   // Listen for clear-chat event from title bar
   useEffect(() => {
@@ -428,7 +433,11 @@ export function MotherAgentMain() {
                 interrupt the natural "pick model → send" action flow on the
                 right. Hidden once the user is already in parasite mode. */}
             {parasiteAgent !== PARASITE_CLAUDE_ID && (
-              <ParasiteHint ccInstalled={parasiteAvailable.includes(PARASITE_CLAUDE_ID)} />
+              <ParasiteHint
+                ccInstalled={parasiteAvailable.includes(PARASITE_CLAUDE_ID)}
+                contextBytes={contextBytes}
+                contextMaxBytes={MA_CONTEXT_MAX_BYTES}
+              />
             )}
             <RemoteModelSelector
               models={modelList}
@@ -497,6 +506,86 @@ export function MotherAgentMain() {
 // Claude Code CLI instead of EchoBird's own agent_loop.
 const PARASITE_CLAUDE_ID = 'claudecode';
 
+// Mirrors `MAX_CONTEXT_BYTES` in echobird_core (services/agent_loop.rs).
+// Used only for visualization — the actual trim happens server-side.
+const MA_CONTEXT_MAX_BYTES = 150_000;
+
+// Rough UTF-8 byte estimate of what gets serialized into the LLM payload.
+// Doesn't have to match Rust's tally exactly — it just needs to grow at the
+// right rate so the ring is a useful "how full am I" indicator. Per message
+// we add a constant envelope (~50–130 bytes) to cover role/content wrapper
+// + tool_use_id/name overhead on the Rust side.
+function estimateContextBytes(messages: readonly ChatMessage[]): number {
+  const encoder = new TextEncoder();
+  let total = 0;
+  for (const m of messages) {
+    switch (m.type) {
+      case 'user':
+      case 'assistant':
+        total += 50 + encoder.encode(m.text).length;
+        break;
+      case 'tool_call':
+        // Becomes two upstream messages: assistant tool_use + user tool_result
+        total += 130 + encoder.encode(m.args).length + encoder.encode(m.output ?? '').length;
+        break;
+      // 'error' and 'cancelled' are frontend-only — never sent to the LLM
+    }
+  }
+  return total;
+}
+
+// ===== Context Usage Ring =====
+// Concentric SVG ring rendered around the "?" glyph. Fills as the estimated
+// payload approaches MA_CONTEXT_MAX_BYTES; transitions to amber then red to
+// telegraph "older messages will start dropping soon".
+
+interface ContextRingProps {
+  ratio: number;
+  children: React.ReactNode;
+}
+
+function ContextRing({ ratio, children }: ContextRingProps) {
+  const clamped = Math.min(1, Math.max(0, ratio));
+  const radius = 9;
+  const circumference = 2 * Math.PI * radius;
+  const dashOffset = circumference * (1 - clamped);
+
+  // Stop colors: secondary text below 70%, warning amber 70–90%, error red above 90%
+  const strokeClass =
+    clamped < 0.7
+      ? 'stroke-cyber-text-secondary/70'
+      : clamped < 0.9
+        ? 'stroke-cyber-warning'
+        : 'stroke-cyber-error';
+
+  return (
+    <span className="relative inline-flex h-5 w-5 items-center justify-center">
+      <svg aria-hidden="true" viewBox="0 0 20 20" className="absolute inset-0 -rotate-90">
+        <circle
+          cx="10"
+          cy="10"
+          r={radius}
+          fill="none"
+          strokeWidth="1.5"
+          className="stroke-cyber-border/40"
+        />
+        <circle
+          cx="10"
+          cy="10"
+          r={radius}
+          fill="none"
+          strokeWidth="1.5"
+          strokeLinecap="round"
+          strokeDasharray={circumference}
+          strokeDashoffset={dashOffset}
+          className={`${strokeClass} transition-all duration-300`}
+        />
+      </svg>
+      <span className="relative">{children}</span>
+    </span>
+  );
+}
+
 // ===== Parasite Hint =====
 // Themed "?" glyph next to the model selector that nudges the user toward
 // Claude Code when they're chatting with EchoBird's own short-memory loop.
@@ -507,21 +596,30 @@ const PARASITE_CLAUDE_ID = 'claudecode';
 
 interface ParasiteHintProps {
   ccInstalled: boolean;
+  contextBytes: number;
+  contextMaxBytes: number;
 }
 
-function ParasiteHint({ ccInstalled }: ParasiteHintProps) {
+function ParasiteHint({ ccInstalled, contextBytes, contextMaxBytes }: ParasiteHintProps) {
   const { t } = useI18n();
-  const tooltip = ccInstalled
+  const baseTip = ccInstalled
     ? t('mother.parasiteTipInstalled')
     : t('mother.parasiteTipNotInstalled');
+  const ratio = contextBytes / contextMaxBytes;
+  const pct = Math.min(100, Math.round(ratio * 100));
+  const usageLine = t('mother.contextUsage')
+    .replace('{used}', Math.round(contextBytes / 1024).toString())
+    .replace('{total}', Math.round(contextMaxBytes / 1024).toString())
+    .replace('{pct}', pct.toString());
+  const ariaLabel = `${baseTip} ${usageLine}`;
 
   return (
     <span className="group relative inline-flex items-center">
       <span
-        aria-label={tooltip}
+        aria-label={ariaLabel}
         className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-cyber-elevated font-sans text-xs font-medium leading-none text-cyber-text-secondary cursor-help select-none hover:bg-cyber-accent/15 hover:text-cyber-accent transition-colors"
       >
-        ?
+        <ContextRing ratio={ratio}>?</ContextRing>
       </span>
       <span
         role="tooltip"
@@ -535,7 +633,10 @@ function ParasiteHint({ ccInstalled }: ParasiteHintProps) {
           aria-hidden="true"
           className="absolute -bottom-1 right-2 h-2 w-2 rotate-45 border-b border-r border-cyber-accent/40 bg-cyber-elevated"
         />
-        {tooltip}
+        <span className="block">{baseTip}</span>
+        <span className="mt-1 block border-t border-cyber-border/40 pt-1 text-cyber-text-secondary">
+          {usageLine}
+        </span>
       </span>
     </span>
   );
