@@ -134,7 +134,7 @@ const ja: Partial<Translations> = {
   'server.tier.recommended': '推奨',
   'server.tier.flagship': 'フラッグシップ',
   'server.tier.minSpec':
-    '最低スペック — CUDA ランタイムをエンジンのビルドと一致させる必要があります(GPU ドライバのインストールだけでは読み込まれません)',
+    'CUDA モジュールはエンジンのビルドと一致させる必要があります — 先にモジュールを、次にエンジンを',
   'server.local': 'ローカル',
   'server.store': 'ストア',
   'server.selectModelDir': 'モデルディレクトリを選択',
