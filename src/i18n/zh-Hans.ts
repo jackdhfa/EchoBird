@@ -32,7 +32,7 @@ const zhHans: Partial<Translations> = {
   'myProjects.deleteTitle': '从列表移除',
   'myProjects.deleteConfirm': '仅从「我的AI项目」列表移除该项目,本机上的项目文件不会被删除。',
   'myProjects.bottomHint':
-    '参考 黑白棋 和 AI翻译 的 models.json,你可以 Vibe Coding 自己的 AI 项目（AI 游戏 / AI 应用),装好后一键切换模型。',
+    '给你 Vibe Coding 的应用或游戏切换模型，参考黑白棋和 AI 翻译的 models.json 或复制它到你的项目。',
   'page.localServer': '本地大模型',
   'page.motherAgent': '安装与修复',
   'page.feedback': '问题反馈',

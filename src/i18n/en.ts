@@ -36,7 +36,7 @@ const en: Translations = {
   'myProjects.deleteConfirm':
     'Removes this entry from your "My AI Projects" list only — the project files on your machine stay where they are.',
   'myProjects.bottomHint':
-    'Use the Reversi / Translator models.json as a starting point — Vibe Code your own AI game or app, then swap models with one click.',
+    'Switch models for your own vibe-coded apps and games — use the Reversi / Translator models.json as a reference, or copy it into your project.',
   'page.localServer': 'LOCAL LLM',
   'page.motherAgent': 'INSTALL & REPAIR',
   'page.feedback': 'FEEDBACK',

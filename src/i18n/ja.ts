@@ -35,7 +35,7 @@ const ja: Partial<Translations> = {
   'myProjects.deleteConfirm':
     '「マイ AI プロジェクト」リストから削除するだけで、ローカルのプロジェクトファイル自体は削除されません。',
   'myProjects.bottomHint':
-    'リバーシ / AI 翻訳 の models.json を参考に、自分の AI ゲーム / AI アプリを Vibe Coding できます。ワンクリックでモデル切り替えにも対応。',
+    'Vibe Coding したアプリやゲームのモデルを切り替え — リバーシ / AI 翻訳の models.json を参考に、または自分のプロジェクトにコピーしてご活用ください。',
   'page.localServer': 'ローカル LLM',
   'page.motherAgent': 'インストール & 修復',
   'page.feedback': 'フィードバック',
