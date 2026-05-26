@@ -873,29 +873,33 @@ export const LocalServerMain: React.FC = () => {
               </div>
             </div>
             <div className="flex-1 overflow-y-auto custom-scrollbar p-2">
-              {engineOptions.map((opt, idx) => (
-                <button
-                  key={opt.assetName}
-                  onClick={() => handleInstallEngineWithPick(opt)}
-                  className="w-full text-left px-3 py-2.5 rounded hover:bg-cyber-elevated transition-colors flex items-center justify-between gap-3 group"
-                >
-                  <div className="flex flex-col min-w-0">
+              {(() => {
+                // Tag of the most recent release — every CUDA variant
+                // from that release gets the "latest" badge (not just
+                // the first row, which was previously misleading: e.g.
+                // CUDA 12.4 of b9320 happened to come first in the
+                // assets array and got the badge while CUDA 13.1 of
+                // the SAME release didn't).
+                const latestTag = engineOptions[0]?.tag;
+                return engineOptions.map((opt) => (
+                  <button
+                    key={opt.assetName}
+                    onClick={() => handleInstallEngineWithPick(opt)}
+                    className="w-full text-left px-3 py-2.5 rounded hover:bg-cyber-elevated transition-colors flex items-center justify-between gap-3 group"
+                  >
                     <div className="font-mono text-sm text-cyber-text">
                       <span className="font-bold">CUDA {opt.cudaVersion}</span>
                       <span className="text-cyber-text-muted ml-2">· {opt.tag}</span>
-                      {idx === 0 && (
+                      {opt.tag === latestTag && (
                         <span className="ml-2 text-xs text-cyber-accent">
                           {t('server.enginePicker.latest')}
                         </span>
                       )}
                     </div>
-                    <div className="text-xs text-cyber-text-muted mt-0.5">
-                      {formatPublishedAt(opt.publishedAt, t)}
-                    </div>
-                  </div>
-                  <Download className="w-4 h-4 text-cyber-text-muted group-hover:text-cyber-accent flex-shrink-0" />
-                </button>
-              ))}
+                    <Download className="w-4 h-4 text-cyber-text-muted group-hover:text-cyber-accent flex-shrink-0" />
+                  </button>
+                ));
+              })()}
             </div>
             <div className="px-5 py-3 border-t border-cyber-border/60 flex justify-end">
               <button
@@ -917,29 +921,6 @@ function formatSize(bytes: number): string {
   if (bytes >= 1e9) return (bytes / 1e9).toFixed(1) + ' GB';
   if (bytes >= 1e6) return (bytes / 1e6).toFixed(0) + ' MB';
   return (bytes / 1e3).toFixed(0) + ' KB';
-}
-
-// Format an ISO 8601 publish timestamp for the engine picker.
-// Recent → relative ("3 days ago" — reuses the pulse.* i18n keys);
-// older → absolute YYYY-MM-DD so the raw date stays legible.
-function formatPublishedAt(iso: string, t: (key: any, params?: any) => string): string {
-  if (!iso) return '';
-  const ts = Date.parse(iso);
-  if (isNaN(ts)) return '';
-  const delta = Date.now() - ts;
-  const minute = 60 * 1000;
-  const hour = 60 * minute;
-  const day = 24 * hour;
-  if (delta < minute) return t('pulse.relJustNow');
-  if (delta < hour) return t('pulse.relMinutes', { n: Math.floor(delta / minute) });
-  if (delta < day) return t('pulse.relHours', { n: Math.floor(delta / hour) });
-  if (delta < 7 * day) return t('pulse.relDays', { n: Math.floor(delta / day) });
-  // > 7 days: show absolute YYYY-MM-DD
-  const d = new Date(ts);
-  const y = d.getFullYear();
-  const m = String(d.getMonth() + 1).padStart(2, '0');
-  const dd = String(d.getDate()).padStart(2, '0');
-  return `${y}-${m}-${dd}`;
 }
 
 // Estimate VRAM needed from file size (rough: fileSize * 1.2)
