@@ -1542,9 +1542,12 @@ export const LocalServerPanel: React.FC = () => {
                                 className={`p-2 rounded transition-colors ${variantDownloaded ? 'bg-cyber-elevated/60' : 'hover:bg-cyber-elevated'}`}
                               >
                                 <div className="flex items-center gap-3">
-                                  {/* Quantization */}
-                                  <span className="text-xs font-mono font-bold text-cyber-text w-14 flex-shrink-0">
-                                    {variant.quantization}
+                                  {/* Quantization — strip the unsloth-Dynamic "UD-" prefix
+                                      cosmetically so labels stay short enough to fit the fixed
+                                      w-14 column without wrapping (e.g. "UD-IQ2_M" → "IQ2_M").
+                                      The catalog still stores the full unsloth name. */}
+                                  <span className="text-xs font-mono font-bold text-cyber-text w-14 flex-shrink-0 whitespace-nowrap">
+                                    {variant.quantization.replace(/^UD-/, '')}
                                   </span>
                                   {/* VRAM + Size */}
                                   <span className="text-[10px] text-cyber-text-secondary flex-1 whitespace-nowrap">
