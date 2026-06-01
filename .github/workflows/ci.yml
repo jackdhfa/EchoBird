@@ -64,7 +64,7 @@ jobs:
       # Load the EchoBird-secret read-only deploy key into the SSH
       # agent so Cargo can clone the private crate during fetch.
       - name: Setup SSH for private deps (echobird_core)
-        uses: webfactory/ssh-agent@v0.9.0
+        uses: webfactory/ssh-agent@v0.10.0
         with:
           ssh-private-key: ${{ secrets.ECHOBIRD_SECRET_DEPLOY_KEY }}
 
