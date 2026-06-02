@@ -5,6 +5,8 @@ import type { TKey } from '../../i18n';
 import { useMotherAgent } from './context';
 import { FRONTEND_HINTS } from './frontendHints';
 import type { MotherHint } from './types';
+import { useToolsStore } from '../../stores/toolsStore';
+import { pickToolName } from '../../stores/myProjectsStore';
 
 // Quick-command chips for the Mother Agent right panel. Each chip drops a
 // self-contained prompt into the chat input (the user edits, then sends).
@@ -13,8 +15,9 @@ import type { MotherHint } from './types';
 // which is how locale-specific chips (e.g. the Claude Chinese patch) hide
 // themselves outside zh-Hans / zh-Hant.
 export function QuickCommandChips() {
-  const { t } = useI18n();
+  const { t, locale } = useI18n();
   const { setChatInput, selectedServerId } = useMotherAgent();
+  const detectedTools = useToolsStore((s) => s.detectedTools);
   const [hints, setHints] = useState<MotherHint[]>([]);
 
   useEffect(() => {
@@ -41,7 +44,14 @@ export function QuickCommandChips() {
         const i18nKey = (isLocalShowSpecs
           ? 'mother.hintShowSpecsLocal'
           : `mother.hint${hint.action[0].toUpperCase()}${hint.action.slice(1)}`) as unknown as TKey;
-        const label = t(i18nKey).replace('{agent}', hint.agent || '');
+        // Localize the {agent} tool name (e.g. "Hermes 桌面端" in zh-Hans) using
+        // the same names map the tool cards use, so install chips match the
+        // cards instead of showing the raw English name. Falls back to the raw
+        // name when the tool isn't in the scanned registry yet.
+        const agentRaw = hint.agent || '';
+        const matched = agentRaw ? detectedTools.find((tool) => tool.name === agentRaw) : undefined;
+        const agentLabel = matched ? pickToolName(matched, locale) : agentRaw;
+        const label = t(i18nKey).replace('{agent}', agentLabel);
         // Skip hints with no translation (label falls back to the raw key).
         if (label === i18nKey) return null;
         return (
