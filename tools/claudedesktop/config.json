@@ -1,5 +1,5 @@
 {
-    "docs": "https://claude.ai/download",
+    "docs": "https://claude.com/download",
     "configFile": "~/.claude/settings.json",
     "format": "json",
     "custom": false

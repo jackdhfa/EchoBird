@@ -7,8 +7,8 @@
     "apiProtocol": [
         "anthropic"
     ],
-    "docs": "https://claude.ai/download",
-    "website": "https://claude.ai/download",
+    "docs": "https://claude.com/download",
+    "website": "https://claude.com/download",
     "command": "",
     "configDir": "~/.claude",
     "configFile": "~/.claude/settings.json",

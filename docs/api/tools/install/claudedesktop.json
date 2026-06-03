@@ -32,6 +32,9 @@
             "That they should click through the wizard themselves (manual installs only)"
         ]
     },
+    "identity_guard": {
+        "description": "Claude Desktop is Anthropic's GUI app. The ONLY official sources are winget `Anthropic.Claude` (preferred — pulls the official MSIX from downloads.claude.ai) or https://claude.com/download. Do NOT install from claude.ai/download: it may serve a different / legacy installer that EchoBird's launcher (MSIX AUMID shell:AppsFolder\\Claude_pzs8sxrjxfjjc!Claude) cannot start, which surfaces as the launch opening a stray Explorer window instead of the app. Claude Desktop is also DIFFERENT from Claude Code (the `@anthropic-ai/claude-code` CLI) — do not conflate their install sources."
+    },
     "network_requirements": {
         "test_urls": ["https://downloads.claude.ai", "https://claude.com"],
         "blocked_regions": {
