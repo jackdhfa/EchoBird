@@ -263,6 +263,7 @@ const ja: Partial<Translations> = {
   'mother.hintDetectCuda': 'CUDA モジュールの状態を確認',
   'mother.hintInstallCuda': 'CUDA モジュールのインストールを支援',
   'mother.hintSetCodexLocale': 'Codex デスクトップを日本語に設定',
+  'mother.hintUnlockCodexPlugins': 'Codex デスクトップのプラグインを解放する',
   'mother.parasiteTipInstalled':
     'AI アシスタントです。短い記憶と確かなインストール能力で、AI の世界へのスタートをお手伝いします。Claude Code にモデルを設定済みであれば、右側で選択すると会話を続けられます。',
   'mother.parasiteTipNotInstalled':

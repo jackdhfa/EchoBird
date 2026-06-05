@@ -225,6 +225,7 @@ export type TKey =
   | 'mother.hintDetectCuda'
   | 'mother.hintInstallCuda'
   | 'mother.hintSetCodexLocale'
+  | 'mother.hintUnlockCodexPlugins'
   | 'mother.hintSetClaudeLocale'
   | 'mother.enterMessage'
   | 'mother.servers'

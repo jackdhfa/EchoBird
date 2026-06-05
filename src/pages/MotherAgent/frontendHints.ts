@@ -13,4 +13,6 @@ export const FRONTEND_HINTS: MotherHint[] = [
   { action: 'setClaudeLocale' },
   // Set Codex Desktop UI language — text: `mother.hintSetCodexLocale`.
   { action: 'setCodexLocale' },
+  // Find & add Codex Desktop plugin marketplaces — text: `mother.hintUnlockCodexPlugins`.
+  { action: 'unlockCodexPlugins' },
 ];

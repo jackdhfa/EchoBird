@@ -289,6 +289,7 @@ const en: Translations = {
   'mother.hintDetectCuda': 'Detect CUDA module status',
   'mother.hintInstallCuda': 'Help me install CUDA modules',
   'mother.hintSetCodexLocale': 'Set Codex Desktop to English',
+  'mother.hintUnlockCodexPlugins': 'Help me unlock Codex Desktop plugins',
   // Intentionally empty: the Claude Chinese-patch chip is shown only for
   // zh-Hans / zh-Hant. An empty label makes translate() fall through to the
   // raw key, which the hint renderer treats as "no translation → hide".
