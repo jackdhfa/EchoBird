@@ -32,9 +32,12 @@ export default {
                     'Microsoft YaHei', 'Segoe UI', 'Roboto', 'Helvetica',
                     'Arial', 'sans-serif',
                 ],
-                // CJK families MUST sit before the generic keywords: a generic
-                // ends the per-glyph search at the WebView default, which for
-                // Chinese in a monospace context on Windows is SimSun (宋体).
+                // CJK families before the generic keyword: a generic ends the
+                // per-glyph search at the WebView default, which for Han in a
+                // monospace context on Windows is SimSun (宋体). Without these,
+                // every `font-mono` element rendered Chinese as SimSun. Mirrors
+                // --font-mono; resolves to the same Microsoft YaHei as the rest
+                // of the UI, so no new font is bundled.
                 mono: [
                     'CascadiaMono', 'Cascadia Code', 'JetBrains Mono',
                     'SF Mono', 'Menlo', 'Monaco', 'Consolas', 'Courier New',

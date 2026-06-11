@@ -121,38 +121,16 @@
   font-display: swap;
 }
 
-/* Noto Sans SC — embedded CJK subset (GB2312 hanzi + CJK punctuation +
-   every character used in src/i18n + public/tools). This is the font the
-   'Noto Sans SC' entries in the stacks below actually resolve to, so
-   Chinese never falls back to SimSun (宋体) on machines without a decent
-   system CJK font. Rebuild with fonttools/pyftsubset if UI strings ever
-   need glyphs outside the subset. */
-@font-face {
-  font-family: 'Noto Sans SC';
-  src: url('/fonts/NotoSansSC-Regular.woff2') format('woff2');
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Noto Sans SC';
-  src: url('/fonts/NotoSansSC-Bold.woff2') format('woff2');
-  font-weight: 700;
-  font-style: normal;
-  font-display: swap;
-}
-
 /* ── Global font stacks ──
-   - --font-sans: Inter for Latin + PingFang SC (macOS) / embedded
-     Noto Sans SC (Windows, Linux) for CJK.
+   - --font-sans: Inter for Latin + Noto Sans SC / PingFang SC for CJK.
+     On macOS, system PingFang SC kicks in via the fallback chain — the
+     embedded otf is only used on Windows / Linux when no premium CJK
+     system font is available.
    - --font-mono: CascadiaMono (woff2, embedded) preferred, then system
-     monos as fallback.
-   - CJK families MUST come BEFORE the generic keywords (ui-monospace,
-     monospace, sans-serif): a generic keyword resolves to the WebView's
-     per-script default font and ends the glyph search — for Han in a
-     monospace context on Windows that default is SimSun (宋体), so any
-     family listed after the generic is dead code. */
+     monos as fallback. CJK families sit BEFORE the ui-monospace/monospace
+     generics: a generic keyword resolves to the WebView's per-script default
+     and ends the glyph search, which for Han in a monospace context on
+     Windows is SimSun (宋体). Any CJK family after the generic is dead code. */
 :root {
   --font-sans:
     'Inter', -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Noto Sans SC', 'Hiragino Sans GB',
@@ -207,11 +185,9 @@
   letter-spacing: 0;
 }
 
-/* ── Page titles & big buttons — Noto Sans (Latin) + Noto Sans SC (CJK) ──
-   PingFang SC first so macOS keeps its native rendering; the embedded
-   Noto Sans SC Bold covers Windows / Linux. */
+/* ── Page titles & big buttons — Noto Sans (Latin) + Noto Sans SC (CJK) ── */
 .cjk-title {
-  font-family: 'Noto Sans', 'PingFang SC', 'Noto Sans SC', 'Microsoft YaHei', system-ui, sans-serif;
+  font-family: 'Noto Sans', 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
   font-weight: 700;
   font-size: 22px;
   letter-spacing: 0.01em;
@@ -232,7 +208,7 @@
 }
 
 .cjk-btn {
-  font-family: 'Noto Sans', 'PingFang SC', 'Noto Sans SC', 'Microsoft YaHei', system-ui, sans-serif;
+  font-family: 'Noto Sans', 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
   font-weight: 700;
 }
 
