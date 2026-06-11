@@ -1,7 +1,7 @@
 {
     "id": "mimocode",
     "displayName": "MiMo Code (CLI)",
-    "homepage": "https://mimo.xiaomi.com/mimocode/start",
+    "homepage": "https://mimo.xiaomi.com/mimocode/",
     "docs": "https://mimo.xiaomi.com/mimocode/start",
     "github": "https://github.com/XiaomiMiMo/MiMo-Code",
     "install": {
