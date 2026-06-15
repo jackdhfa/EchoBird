@@ -176,6 +176,14 @@
       "anthropicUrl": "",
       "modelId": "",
       "region": "global"
+    },
+    {
+      "name": "Agnes AI",
+      "url": "https://platform.agnes-ai.com/",
+      "baseUrl": "https://apihub.agnes-ai.com/v1",
+      "anthropicUrl": "",
+      "modelId": "agnes-2.0-flash",
+      "region": "global"
     }
   ],
   "relays": [

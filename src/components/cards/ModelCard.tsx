@@ -36,12 +36,14 @@ export const getModelIcon = (name: string, modelId?: string): string | null => {
     [['openrouter'], 'openrouter'],
     [['worldrouter'], 'worldrouter'],
     [['b.ai', 'bai'], 'b-ai'],
+    [['agnes'], 'agnes'],
   ];
 
   for (const [keywords, icon] of iconMap) {
     if (keywords.some((kw) => text.includes(kw))) {
       if (icon === 'worldrouter') return './icons/models/worldrouter.png';
       if (icon === 'b-ai') return './icons/models/b-ai.ico';
+      if (icon === 'agnes') return './icons/models/agnes.png';
       return `./icons/models/${icon}.svg`;
     }
   }
