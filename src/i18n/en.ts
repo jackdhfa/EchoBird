@@ -207,7 +207,7 @@ const en: Translations = {
   'server.setupEngine': 'SETUP ENGINE',
   'server.customCmdTitle': 'Custom launch command',
   'server.customCmdDesc':
-    'First line is the executable, then one argument per line. Point at your own engine build (e.g. a Vulkan llama-server) if you like. Keep --host / --port unchanged so EchoBird can reach the server.',
+    'First line is the executable, then one argument per line. Point at your own engine build (e.g. a Vulkan llama-server) if you like. The model, --host and --port are set by EchoBird at launch (the model selected on the right + the app port), so editing them here has no effect; everything else is yours.',
   'server.customCmdReset': 'Reset to default',
   'server.upgradeEngine': 'UPGRADE ENGINE',
   'server.downloading': 'DOWNLOADING',

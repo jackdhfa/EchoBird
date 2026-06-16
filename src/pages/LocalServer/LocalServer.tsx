@@ -127,6 +127,7 @@ export const LocalServerMain: React.FC = () => {
   const { t } = useI18n();
   const {
     selectedModelPath,
+    setSelectedModelPath,
     rescanModels,
     serverRunning: isRunning,
     setServerRunning: setIsRunning,
@@ -441,18 +442,36 @@ export const LocalServerMain: React.FC = () => {
   // how an AMD user points at their own Vulkan llama-server build.
   const cmdToText = (c: { exe: string; args: string[] }) => [c.exe, ...c.args].join('\n');
 
+  // The launch command's model is owned by the right-panel selector, not the
+  // gear: EchoBird injects -m (+ --host/--port) at launch. So the dialog always
+  // shows the model line as the current UI selection (or a placeholder when
+  // none), and adopting a hand-typed -m on save just sets that selection.
+  const MODEL_TOKEN = '<MODEL>';
+  const setModelInArgs = (args: string[], model: string): string[] => {
+    const out = [...args];
+    const i = out.findIndex((a) => a === '-m' || a === '--model');
+    if (i >= 0) out[i + 1] = model;
+    else out.push('-m', model);
+    return out;
+  };
+  const modelFromArgs = (args: string[]): string | null => {
+    const i = args.findIndex((a) => a === '-m' || a === '--model');
+    return i >= 0 && i + 1 < args.length ? args[i + 1] : null;
+  };
+
   const openCustomCmd = async () => {
-    if (!selectedModelPath) return;
     try {
+      const model = selectedModelPath || MODEL_TOKEN;
       const def = await api.getLlmDefaultCommand(
-        selectedModelPath,
+        selectedModelPath || '',
         serverPort,
         gpuLayers,
         contextSize
       );
-      setDefaultCmdText(cmdToText(def));
-      const custom = await api.getLlmCustomCommand(selectedModelPath);
-      setCustomCmdText(cmdToText(custom ?? def));
+      setDefaultCmdText(cmdToText({ exe: def.exe, args: setModelInArgs(def.args, model) }));
+      const custom = await api.getLlmCustomCommand();
+      const cmd = custom ?? def;
+      setCustomCmdText(cmdToText({ exe: cmd.exe, args: setModelInArgs(cmd.args, model) }));
       setCustomCmdOpen(true);
     } catch (e) {
       setLogs((prev) => [...prev, `[Error] ${e}`]);
@@ -460,16 +479,21 @@ export const LocalServerMain: React.FC = () => {
   };
 
   const saveCustomCmd = async () => {
-    if (!selectedModelPath) return;
     const lines = customCmdText
       .split('\n')
       .map((l) => l.trim())
       .filter((l) => l.length > 0);
     try {
       if (lines.length === 0) {
-        await api.clearLlmCustomCommand(selectedModelPath);
+        await api.clearLlmCustomCommand();
       } else {
-        await api.setLlmCustomCommand(selectedModelPath, lines[0], lines.slice(1));
+        await api.setLlmCustomCommand(lines[0], lines.slice(1));
+        // Adopt a hand-typed real model path as the selection so START enables
+        // and the right panel reflects it (the placeholder token is ignored).
+        const m = modelFromArgs(lines.slice(1));
+        if (m && m !== MODEL_TOKEN && m !== selectedModelPath) {
+          setSelectedModelPath(m);
+        }
       }
       setCustomCmdOpen(false);
     } catch (e) {
@@ -478,9 +502,8 @@ export const LocalServerMain: React.FC = () => {
   };
 
   const resetCustomCmd = async () => {
-    if (!selectedModelPath) return;
     try {
-      await api.clearLlmCustomCommand(selectedModelPath);
+      await api.clearLlmCustomCommand();
       setCustomCmdText(defaultCmdText);
     } catch (e) {
       setLogs((prev) => [...prev, `[Error] ${e}`]);
@@ -544,7 +567,6 @@ export const LocalServerMain: React.FC = () => {
     // llama-server engine with a model selected (the default command can't be
     // built otherwise); null in every other state so it doesn't show.
     const canCustomize =
-      !!selectedModelPath &&
       runtime === 'llama-server' &&
       (engineStatus === 'ready' || engineStatus === 'update-available');
     const gearBtn = canCustomize ? (

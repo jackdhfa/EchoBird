@@ -205,7 +205,7 @@ const ja: Partial<Translations> = {
   'server.setupEngine': 'エンジン導入',
   'server.customCmdTitle': 'カスタム起動コマンド',
   'server.customCmdDesc':
-    '1行目は実行ファイル、以降は1行に1つの引数です。自分のエンジン（例: Vulkan版 llama-server）を指定できます。EchoBird が接続できるよう --host / --port は変更しないでください。',
+    '1行目は実行ファイル、以降は1行に1つの引数です。自分のエンジン（例: Vulkan版 llama-server）を指定できます。モデル・--host・--port は起動時に EchoBird が管理します（右側で選んだモデルとアプリのポート）。ここで変更しても無効で、その他の引数は自由です。',
   'server.customCmdReset': 'デフォルトに戻す',
   'server.upgradeEngine': 'エンジン更新',
   'server.downloading': 'ダウンロード中',

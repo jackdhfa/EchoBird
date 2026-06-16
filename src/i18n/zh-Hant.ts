@@ -199,7 +199,7 @@ const zhHant: Partial<Translations> = {
   'server.setupEngine': '安裝引擎',
   'server.customCmdTitle': '自訂啟動命令',
   'server.customCmdDesc':
-    '第一行是可執行檔，其餘每行一個參數。可指向你自己的引擎（如 Vulkan 版 llama-server）。請保持 --host / --port 不變，否則 EchoBird 連不上本機服務。',
+    '第一行是可執行檔，其餘每行一個參數。可指向你自己的引擎（如 Vulkan 版 llama-server）。模型、--host、--port 由 EchoBird 在啟動時接管（用右側所選模型和應用連接埠），改這幾項無效；其餘參數隨你。',
   'server.customCmdReset': '重設為預設',
   'server.upgradeEngine': '升級引擎',
   'server.downloading': '下載中',

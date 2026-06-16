@@ -53,21 +53,17 @@ export async function getLlmDefaultCommand(
   });
 }
 
-/** The user's stored custom command for a model, or null if none (auto mode). */
-export async function getLlmCustomCommand(modelPath: string): Promise<LlamaCommand | null> {
-  return invoke('get_llm_custom_command', { modelPath });
+/** The stored global custom command, or null if none (auto mode). */
+export async function getLlmCustomCommand(): Promise<LlamaCommand | null> {
+  return invoke('get_llm_custom_command');
 }
 
-export async function setLlmCustomCommand(
-  modelPath: string,
-  exe: string,
-  args: string[]
-): Promise<void> {
-  return invoke('set_llm_custom_command', { modelPath, exe, args });
+export async function setLlmCustomCommand(exe: string, args: string[]): Promise<void> {
+  return invoke('set_llm_custom_command', { exe, args });
 }
 
-export async function clearLlmCustomCommand(modelPath: string): Promise<void> {
-  return invoke('clear_llm_custom_command', { modelPath });
+export async function clearLlmCustomCommand(): Promise<void> {
+  return invoke('clear_llm_custom_command');
 }
 
 export async function getModelsDirs(): Promise<string[]> {
