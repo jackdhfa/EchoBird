@@ -63,7 +63,6 @@ export const useAppManager = () => {
 export const toolCategories = [
   'ALL',
   'Desktop',
-  'Agents',
   'IDE',
   'CLI Code',
   'AutoTrading',

@@ -46,7 +46,6 @@ export const AppManagerMain: React.FC = () => {
               {(() => {
                 const catMap: Record<string, string> = {
                   ALL: 'toolCat.all',
-                  Agents: 'toolCat.agents',
                   IDE: 'toolCat.ide',
                   'CLI Code': 'toolCat.cli',
                   AutoTrading: 'toolCat.autoTrading',
@@ -106,7 +105,6 @@ export const AppManagerMain: React.FC = () => {
                 // 3. Then by category
                 const categoryOrder: Record<string, number> = {
                   Desktop: 0,
-                  Agents: 1,
                   IDE: 2,
                   'CLI Code': 3,
                   AutoTrading: 4,

@@ -1,4 +1,4 @@
-﻿// Simplified Chinese translation
+// Simplified Chinese translation
 import { Translations } from './types';
 const zhHans: Partial<Translations> = {
   'nav.news': 'AI 资讯',
@@ -148,7 +148,6 @@ const zhHans: Partial<Translations> = {
   'common.confirm': '确认',
   'common.areYouSure': '确定要执行此操作吗？',
   'toolCat.all': '全部',
-  'toolCat.agents': 'Agents',
   'toolCat.ide': 'IDE',
   'toolCat.cli': 'CLI Code',
   'toolCat.autoTrading': '量化分析',

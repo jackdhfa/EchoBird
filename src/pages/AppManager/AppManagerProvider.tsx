@@ -151,10 +151,6 @@ export const AppManagerProvider: React.FC<AppManagerProviderProps> = ({ children
     openclaw: null,
     opencode: null,
     codex: null,
-    zeroclaw: null,
-    nanobot: null,
-    picoclaw: null,
-    openfang: null,
     hermes: null,
   });
 

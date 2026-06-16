@@ -72,8 +72,8 @@ export const OFFICIAL_ENDPOINTS: Record<string, OfficialEndpoint> = {
     modelId: 'mimo-v2.5-pro',
   },
   // OpenCode is a third-party tool, not OpenAI official
-  // Community open-source tools (openclaw, zeroclaw, hermes, nanobot,
-  // picoclaw, openfang, opencode) have no canonical vendor URL — restore is hidden.
+  // Community open-source tools (openclaw, hermes, opencode) have no
+  // canonical vendor URL — restore is hidden.
 };
 
 export function getOfficialEndpoint(toolId: string): OfficialEndpoint | undefined {

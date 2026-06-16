@@ -35,10 +35,7 @@ Tools that are installed as separate executables:
 - **coffeecli**: Coffee CLI
 - **qwencode**: Qwen Code
 - **opencode**: Open Code
-- **openfang**: Open Fang
 - **pi**: Pi assistant
-- **picoclaw**: Pico Claw
-- **nanobot**: Nano Bot
 - **vibe-trading**: AI quant-research / market-analysis agent (Quant Analysis category)
 
 ### 2. Desktop Apps

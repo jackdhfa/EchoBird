@@ -1,4 +1,4 @@
-﻿// English baseline translation (complete reference, fallback for all locales)
+// English baseline translation (complete reference, fallback for all locales)
 import { Translations } from './types';
 
 const en: Translations = {
@@ -171,7 +171,6 @@ const en: Translations = {
   'common.areYouSure': 'Are you sure?',
   // Tool categories
   'toolCat.all': 'ALL',
-  'toolCat.agents': 'Agents',
   'toolCat.ide': 'IDE',
   'toolCat.cli': 'CLI Code',
   'toolCat.autoTrading': 'Quant Analysis',

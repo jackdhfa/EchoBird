@@ -47,10 +47,6 @@ static BUNDLED: BundledAssets = BundledAssets {
             include_str!("../../docs/api/tools/install/hermes.json"),
         ),
         (
-            "nanobot",
-            include_str!("../../docs/api/tools/install/nanobot.json"),
-        ),
-        (
             "openclaw",
             include_str!("../../docs/api/tools/install/openclaw.json"),
         ),
@@ -61,18 +57,6 @@ static BUNDLED: BundledAssets = BundledAssets {
         (
             "mimocode",
             include_str!("../../docs/api/tools/install/mimocode.json"),
-        ),
-        (
-            "openfang",
-            include_str!("../../docs/api/tools/install/openfang.json"),
-        ),
-        (
-            "picoclaw",
-            include_str!("../../docs/api/tools/install/picoclaw.json"),
-        ),
-        (
-            "zeroclaw",
-            include_str!("../../docs/api/tools/install/zeroclaw.json"),
         ),
         (
             "claudedesktop",

@@ -174,7 +174,6 @@ const ja: Partial<Translations> = {
   'common.confirm': '確認',
   'common.areYouSure': '実行してよろしいですか？',
   'toolCat.all': 'すべて',
-  'toolCat.agents': 'Agents',
   'toolCat.ide': 'IDE',
   'toolCat.cli': 'CLI Code',
   'toolCat.autoTrading': 'クオンツ分析',

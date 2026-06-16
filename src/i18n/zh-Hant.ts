@@ -168,7 +168,6 @@ const zhHant: Partial<Translations> = {
   'common.confirm': '確認',
   'common.areYouSure': '確定要執行此操作嗎？',
   'toolCat.all': '全部',
-  'toolCat.agents': 'Agents',
   'toolCat.ide': 'IDE',
   'toolCat.cli': 'CLI Code',
   'toolCat.autoTrading': '量化分析',

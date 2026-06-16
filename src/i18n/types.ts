@@ -147,7 +147,6 @@ export type TKey =
   | 'agent.codexResponsesHint'
   // Tool categories
   | 'toolCat.all'
-  | 'toolCat.agents'
   | 'toolCat.ide'
   | 'toolCat.cli'
   | 'toolCat.autoTrading'

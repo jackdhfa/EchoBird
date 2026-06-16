@@ -1,6 +1,6 @@
 {
     "name": "OpenClaw",
-    "category": "Agents",
+    "category": "CLI Code",
     "apiProtocol": [
         "openai",
         "anthropic"

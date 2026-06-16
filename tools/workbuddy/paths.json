@@ -1,6 +1,6 @@
 {
     "name": "WorkBuddy",
-    "category": "Agents",
+    "category": "Desktop",
     "apiProtocol": [
         "openai"
     ],
@@ -12,8 +12,12 @@
     "requireConfigFile": false,
     "detectByConfigDir": true,
     "paths": {
-        "win32": [],
-        "darwin": [],
+        "win32": [
+            "%LOCALAPPDATA%/Programs/WorkBuddy/WorkBuddy.exe"
+        ],
+        "darwin": [
+            "/Applications/WorkBuddy.app/Contents/MacOS/WorkBuddy"
+        ],
         "linux": []
     },
     "installHints": {
