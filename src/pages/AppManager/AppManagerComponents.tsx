@@ -484,8 +484,8 @@ export const AppManagerPanel: React.FC = () => {
   const showResponsesToggle = isCodexApp;
   const relayModeValue = isClaudeDesktopApp ? claudeDesktopRelayMode : codexRelayMode;
   const setRelayModeValue = isClaudeDesktopApp ? setClaudeDesktopRelayMode : setCodexRelayMode;
-  // 1M-context toggle: Claude Desktop now (Claude Code in a later step).
-  const show1mToggle = isClaudeDesktopApp;
+  // 1M-context toggle: Claude Desktop + Claude Code.
+  const show1mToggle = isClaudeDesktopApp || selectedTool === 'claudecode';
 
   return (
     <>
@@ -506,7 +506,7 @@ export const AppManagerPanel: React.FC = () => {
           renders here and the model list below claims the space — the
           user explicitly preferred no reserved gap when the toggle is
           absent. */}
-      {showRelayToggle && (
+      {(showRelayToggle || show1mToggle) && (
         <div className="px-3 h-9 flex items-center gap-2">
           {showResponsesToggle && (
             <RoutingToggle

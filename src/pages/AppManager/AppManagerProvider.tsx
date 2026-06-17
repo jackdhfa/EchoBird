@@ -217,6 +217,7 @@ export const AppManagerProvider: React.FC<AppManagerProviderProps> = ({ children
     // tool_id mismatch.
     const isCodexApp = toolId === 'codex' || toolId === 'codexdesktop';
     const isClaudeDesktopApp = toolId === 'claudedesktop';
+    const isClaudeApp = isClaudeDesktopApp || toolId === 'claudecode';
     const isRelayCapableApp = isCodexApp || isClaudeDesktopApp;
     const currentRelayMode = isClaudeDesktopApp ? claudeDesktopRelayMode : codexRelayMode;
     const effectiveRelay = relayOverride ?? currentRelayMode;
@@ -225,8 +226,8 @@ export const AppManagerProvider: React.FC<AppManagerProviderProps> = ({ children
     // the backend as both-true even if a caller passes an inconsistent pair.
     const effectivePassthrough =
       isCodexApp && !effectiveRelay && (passthroughOverride ?? codexResponsesPassthrough);
-    // 1M context is Claude-only (Claude Desktop now; Claude Code in a later step).
-    const effective1m = isClaudeDesktopApp && (oneMOverride ?? claude1mMode);
+    // 1M context — Claude Desktop + Claude Code (both honor the [1m] variant).
+    const effective1m = isClaudeApp && (oneMOverride ?? claude1mMode);
 
     try {
       const result = await api.applyModelToTool(toolId, {
@@ -238,7 +239,7 @@ export const AppManagerProvider: React.FC<AppManagerProviderProps> = ({ children
         protocol: selectedProtocol,
         ...(isRelayCapableApp ? { relayMode: effectiveRelay } : {}),
         ...(isCodexApp ? { responsesPassthrough: effectivePassthrough } : {}),
-        ...(isClaudeDesktopApp ? { oneMContext: effective1m } : {}),
+        ...(isClaudeApp ? { oneMContext: effective1m } : {}),
       });
 
       if (result?.success) {
@@ -353,15 +354,19 @@ export const AppManagerProvider: React.FC<AppManagerProviderProps> = ({ children
     (v: boolean) => {
       setClaude1mModeRaw(v);
       writeBool('echobird_claude_1m_mode', v);
-      const pendingInternalId = toolModelConfig['claudedesktop'];
-      if (!pendingInternalId || isOfficialModelSentinel(pendingInternalId)) return;
-      void applyModelConfig('claudedesktop', pendingInternalId, undefined, undefined, v).then(
-        (result) => {
-          if (result !== true) {
-            setApplyError(typeof result === 'string' ? result : t('key.destroyed'));
+      // Shared across Claude Desktop + Claude Code — re-apply whichever has a
+      // configured model so the [1m] variant lands immediately on both.
+      for (const claudeToolId of ['claudedesktop', 'claudecode'] as const) {
+        const pendingInternalId = toolModelConfig[claudeToolId];
+        if (!pendingInternalId || isOfficialModelSentinel(pendingInternalId)) continue;
+        void applyModelConfig(claudeToolId, pendingInternalId, undefined, undefined, v).then(
+          (result) => {
+            if (result !== true) {
+              setApplyError(typeof result === 'string' ? result : t('key.destroyed'));
+            }
           }
-        }
-      );
+        );
+      }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [toolModelConfig, t, userModels]
