@@ -34,7 +34,7 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   }, []);
 
   const showToast = useCallback(
-    (type: ToastType, message: string, title?: string, duration = 3000) => {
+    (type: ToastType, message: string, title?: string, duration = 5000) => {
       const id = Math.random().toString(36).substring(2, 9);
       const newToast: ToastMessage = { id, type, title, message, duration };
       setToasts((prev) => [...prev, newToast]);
@@ -46,7 +46,7 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   return (
     <ToastContext.Provider value={{ showToast, removeToast }}>
       {children}
-      <div className="fixed top-4 left-1/2 -translate-x-1/2 z-[9999] flex flex-col gap-2 w-full max-w-md pointer-events-none">
+      <div className="fixed top-20 left-1/2 -translate-x-1/2 z-[9999] flex flex-col items-center gap-2 pointer-events-none">
         {toasts.map((toast) => (
           <ToastItem key={toast.id} toast={toast} onRemove={removeToast} />
         ))}
@@ -60,10 +60,19 @@ const ToastItem: React.FC<{ toast: ToastMessage; onRemove: (id: string) => void 
   onRemove,
 }) => {
   const [isExiting, setIsExiting] = useState(false);
+  const [isEntered, setIsEntered] = useState(false);
+
+  // Slide-down + fade-in: render once in the "above & transparent" state, then
+  // flip to the resting state on the next tick so the CSS transition actually
+  // runs (mounting straight into the final state would just flash in).
+  useEffect(() => {
+    const t = setTimeout(() => setIsEntered(true), 30);
+    return () => clearTimeout(t);
+  }, []);
 
   const handleRemove = useCallback(() => {
     setIsExiting(true);
-    setTimeout(() => onRemove(toast.id), 300); // Wait for animation
+    setTimeout(() => onRemove(toast.id), 500); // wait for the exit transition
   }, [onRemove, toast.id]);
 
   useEffect(() => {
@@ -110,9 +119,9 @@ const ToastItem: React.FC<{ toast: ToastMessage; onRemove: (id: string) => void 
                 border-l-4 ${getBorderColor()}
                 text-cyber-text
                 p-4 shadow-lg rounded-lg
-                transition-all duration-300 ease-out
-                ${isExiting ? '-translate-y-3 opacity-0' : 'translate-y-0 opacity-100'}
-                animate-in slide-in-from-top-4 fade-in
+                max-w-md
+                transition-all duration-500 ease-out
+                ${isEntered && !isExiting ? 'translate-y-0 opacity-100' : '-translate-y-4 opacity-0'}
                 group
                 flex items-start gap-3
             `}
