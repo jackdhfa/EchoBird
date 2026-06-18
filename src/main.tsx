@@ -8,6 +8,7 @@ import { detectLocale, loadLocale, resolveLocale } from './i18n';
 import * as api from './api/tauri';
 import { getCurrentWindow } from '@tauri-apps/api/window';
 import { IS_MACOS } from './utils/platform';
+import { ErrorBoundary } from './components/ErrorBoundary';
 
 // ── Boot pipeline ────────────────────────────────────────────────────────────
 // One linear sequence runs before the Tauri window becomes visible:
@@ -102,7 +103,43 @@ function showWindowAfterFirstPaint(): void {
   });
 }
 
-(async () => {
+// Pre-React crash floor. If the boot pipeline throws BEFORE React mounts (the
+// ErrorBoundary only catches errors during render), inject a minimal,
+// self-contained error screen straight into #root — built with DOM APIs (no
+// inline handlers, CSP-safe; no theme/i18n deps) so the user sees the failure
+// instead of the blank window the 1s safety-show fallback would otherwise reveal.
+function renderBootError(err: unknown): void {
+  const root = document.getElementById('root');
+  if (!root) return;
+  const msg =
+    err instanceof Error ? `${err.name}: ${err.message}\n\n${err.stack ?? ''}` : String(err);
+  root.textContent = '';
+  const wrap = document.createElement('div');
+  wrap.setAttribute(
+    'style',
+    'position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;padding:24px;background:#1a1a1a;color:#e8e8e8;font-family:system-ui,-apple-system,sans-serif;text-align:center;'
+  );
+  const title = document.createElement('div');
+  title.setAttribute('style', 'font-size:18px;font-weight:600;');
+  title.textContent = '启动失败 / Startup failed';
+  const pre = document.createElement('pre');
+  pre.setAttribute(
+    'style',
+    'max-width:640px;max-height:220px;overflow:auto;text-align:left;font-size:12px;line-height:1.5;padding:12px;border-radius:8px;background:#0f0f0f;color:#ff9b9b;white-space:pre-wrap;word-break:break-word;margin:0;'
+  );
+  pre.textContent = msg;
+  const reload = document.createElement('button');
+  reload.setAttribute(
+    'style',
+    'padding:8px 16px;border-radius:8px;border:1px solid #444;background:#2a2a2a;color:#e8e8e8;cursor:pointer;font-size:13px;'
+  );
+  reload.textContent = '重新加载 / Reload';
+  reload.addEventListener('click', () => window.location.reload());
+  wrap.append(title, pre, reload);
+  root.append(wrap);
+}
+
+async function bootAndRender(): Promise<void> {
   const [locale] = await Promise.all([bootI18n(), bootFonts(), bootBrandImage()]);
 
   // Sync <html lang> before render so :lang(zh) CJK overrides apply on the
@@ -134,11 +171,24 @@ function showWindowAfterFirstPaint(): void {
 
   ReactDOM.createRoot(document.getElementById('root')!).render(
     <React.StrictMode>
-      <I18nProvider initialLocale={locale}>
-        <App />
-      </I18nProvider>
+      <ErrorBoundary>
+        <I18nProvider initialLocale={locale}>
+          <App />
+        </I18nProvider>
+      </ErrorBoundary>
     </React.StrictMode>
   );
+}
 
-  showWindowAfterFirstPaint();
+(async () => {
+  try {
+    await bootAndRender();
+  } catch (err) {
+    console.error('[main.tsx] boot failed before render:', err);
+    renderBootError(err);
+  } finally {
+    // Always reveal the window — on success it shows the app; on failure, the
+    // error screen above, instead of the blank 1s safety-show fallback window.
+    showWindowAfterFirstPaint();
+  }
 })();
