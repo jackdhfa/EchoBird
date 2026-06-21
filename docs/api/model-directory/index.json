@@ -38,7 +38,7 @@
     },
     {
       "name": "GLM 智谱",
-      "url": "https://bigmodel.cn/",
+      "url": "https://api.bigmodel.cn/",
       "baseUrl": "https://open.bigmodel.cn/api/coding/paas/v4",
       "anthropicUrl": "https://open.bigmodel.cn/api/anthropic",
       "modelId": "glm-5.2",
@@ -46,7 +46,7 @@
     },
     {
       "name": "Z.ai",
-      "url": "https://z.ai",
+      "url": "https://api.z.ai",
       "baseUrl": "https://api.z.ai/api/coding/paas/v4",
       "anthropicUrl": "https://api.z.ai/api/anthropic",
       "modelId": "glm-5.2",
